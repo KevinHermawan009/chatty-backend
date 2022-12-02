@@ -10,3 +10,5 @@ yarn add express-async-error //catch async await errors
 yarn add http-status-codes
 
 app.use -> 'use' used to call middleware
+
+yarn add @socket.io/redis-adapter -D
