@@ -14,6 +14,7 @@ import hpp from 'hpp';
 import HTTP_STATUS from 'http-status-codes';
 import cookieSession from 'cookie-session';
 import 'express-async-error'
+import { config } from "./config";
 
 const SERVER_PORT = 3001;
 
@@ -37,15 +38,15 @@ export class ChattyServer {
     app.use(
       cookieSession({
         name: 'session',
-        keys: ['test1', 'test2'],
+        keys: [config.SECRET_KEY_ONE!, config.SECRET_KEY_TWO!],
         maxAge: 24 * 7 *3600000, //cookie valid time 
-        secure: false //before deploy set to false
+        secure: config.NODE_ENV !== 'development' //before deploy set to false
       })
     );
     app.use(hpp());
     app.use(helmet());
     app.use(cors({
-      origin: '*',
+      origin: config.CLIENT_URL,
       credentials: true, //for cookies to work
       optionsSuccessStatus: 200,
       methods:  ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']

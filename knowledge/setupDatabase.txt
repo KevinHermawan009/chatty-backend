@@ -1,0 +1,2 @@
+yarn add mongoose
+export default here is send default data only
