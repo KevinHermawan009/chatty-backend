@@ -1,0 +1,10 @@
+What is a Constructor in JavaScript?
+Special function yang membuat dan initalized sebuah object instance dari sebuah class dan biasanya di panggil dengan keyword 'new'
+
+Purpose? 
+membuat object baru & set value existing object
+
+What Happens When A Constructor Gets Called?
+- object kosong baru di buat
+- 'this' akan refer ke new object dan menjadi current instance object
+- object baru akan di returned seperti the return value sih Constructor
