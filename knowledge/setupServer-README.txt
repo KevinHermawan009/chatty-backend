@@ -12,3 +12,6 @@ yarn add http-status-codes
 app.use -> 'use' used to call middleware
 
 yarn add @socket.io/redis-adapter -D
+
+to run redis server run command in ur ubuntu 'redis-server'
+read redis installation here 'https://redis.io/docs/getting-started/installation/install-redis-on-windows/'
