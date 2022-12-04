@@ -15,6 +15,9 @@ import HTTP_STATUS from 'http-status-codes';
 import cookieSession from 'cookie-session';
 import 'express-async-error'
 import { config } from "./config";
+import { Server } from 'socket.io';
+import { createClient } from 'redis';
+import { createAdapter } from '@socket.io/redis-adapter';
 
 const SERVER_PORT = 3001;
 
@@ -63,21 +66,40 @@ export class ChattyServer {
 
   private globalErrorHandler(app: Application): void {}
 
-  private startServer(app: Application): void {
+  private async startServer(app: Application): Promise <void> {
     try {
       const httpServer: http.Server = new http.Server(app);
+      const socketIO: Server = await this.createSocketIO(httpServer)
       this.startHttpServer(httpServer);
+      this.socketIOConnections(socketIO);
     } catch (error) {
-      console.log('err')
+      console.log('err', error)
       
     }
   }
 
-  private cteateSocketIO(httpServer: http.Server): void {}
+  private async createSocketIO(httpServer: http.Server): Promise <Server> {
+    const io: Server = new Server( httpServer, {
+        cors: {
+        origin: config.CLIENT_URL,
+        methods:  ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
+    }
+  });
+    const pubClient = createClient({url: config.REDIS_HOST});
+    const subCLient = pubClient.duplicate();
+    await Promise.all([pubClient.connect(), subCLient.connect()])
+    io.adapter(createAdapter(pubClient, subCLient));
+    return io;
+  }
 
   private startHttpServer(httpServer: http.Server): void {
+    console.log(`Server is runnin ${process.pid}`)
     httpServer.listen(SERVER_PORT, ()=>{
       console.log('server is up ',SERVER_PORT);
     });
+  }
+
+  private socketIOConnections(io: Server): void{
+    //place to defined socket method
   }
 }
