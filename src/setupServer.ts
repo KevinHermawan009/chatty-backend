@@ -5,22 +5,22 @@ import {
   Response,
   Request,
   NextFunction,
-} from "express";
-import http from "http";
+} from 'express';
+import http from 'http';
 import cors from 'cors';
 import helmet from 'helmet';
 import compression from 'compression';
 import hpp from 'hpp';
 import HTTP_STATUS from 'http-status-codes';
 import cookieSession from 'cookie-session';
-import 'express-async-error'
-import { config } from "./config";
+import 'express-async-error';
+import { config } from './config';
 import { Server } from 'socket.io';
 import { createClient } from 'redis';
 import { createAdapter } from '@socket.io/redis-adapter';
 import applicationRoutes from './routes';
 import Logger from 'bunyan';
-import { CustomError, IErrorResponse } from "./shared/globals/helpers/error-handler";
+import { CustomError, IErrorResponse } from './shared/globals/helpers/error-handler';
 
 const SERVER_PORT = 3001;
 const log: Logger = config.createLogger('server');
@@ -45,7 +45,7 @@ export class ChattyServer {
       cookieSession({
         name: 'session',
         keys: [config.SECRET_KEY_ONE!, config.SECRET_KEY_TWO!],
-        maxAge: 24 * 7 *3600000, //cookie valid time 
+        maxAge: 24 * 7 *3600000, //cookie valid time
         secure: config.NODE_ENV !== 'development' //before deploy set to false
       })
     );
@@ -61,37 +61,37 @@ export class ChattyServer {
 
   private standardMiddleware(app: Application): void {
     app.use(compression());
-    app.use(json({ limit: '50mb'})) //catch error when request past the 50mb
-    app.use(urlencoded({ extended: true, limit: '50mb'}))
+    app.use(json({ limit: '50mb'})); //catch error when request past the 50mb
+    app.use(urlencoded({ extended: true, limit: '50mb'}));
   }
 
   private routesMiddleware(app: Application): void {
     applicationRoutes(app);
   }
-  
+
   private globalErrorHandler(app: Application): void {
     app.all('*', (req: Request, res: Response)=>{
-      res.status(HTTP_STATUS.NOT_FOUND).json({message: `${req.originalUrl} not found`})
-    }); //this how express catch erorr which related to URL available 
+      res.status(HTTP_STATUS.NOT_FOUND).json({message: `${req.originalUrl} not found`});
+    }); //this how express catch erorr which related to URL available
     app.use((error: IErrorResponse, req: Request, res: Response, next: NextFunction) => {
-      log.error(error)
+      log.error(error);
       if(error instanceof CustomError) {
-        return res.status(error.statusCode).json(error.serializeErrors())
+        return res.status(error.statusCode).json(error.serializeErrors());
       }
       next();
-    })
+    });
     //response from 'IErrorResponse' -> and itll check to 'serializeErrors()' which error need to run from 'IError'
   }
 
   private async startServer(app: Application): Promise <void> {
     try {
       const httpServer: http.Server = new http.Server(app);
-      const socketIO: Server = await this.createSocketIO(httpServer)
+      const socketIO: Server = await this.createSocketIO(httpServer);
       this.startHttpServer(httpServer);
       this.socketIOConnections(socketIO);
     } catch (error) {
-      log.error('err', error)
-      
+      log.error('err', error);
+
     }
   }
 
@@ -104,13 +104,13 @@ export class ChattyServer {
   });
     const pubClient = createClient({url: config.REDIS_HOST});
     const subCLient = pubClient.duplicate();
-    await Promise.all([pubClient.connect(), subCLient.connect()])
+    await Promise.all([pubClient.connect(), subCLient.connect()]);
     io.adapter(createAdapter(pubClient, subCLient));
     return io;
   }
 
   private startHttpServer(httpServer: http.Server): void {
-    log.info(`Server is runnin ${process.pid}`)
+    log.info(`Server is runnin ${process.pid}`);
     httpServer.listen(SERVER_PORT, ()=>{
       log.info('server is up ',SERVER_PORT);
     });

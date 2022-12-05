@@ -1,6 +1,6 @@
 import express, {Express} from 'express';
 import { ChattyServer } from './setupServer';
-import databaseConenction from './setupDatabase'
+import databaseConenction from './setupDatabase';
 import { config } from './config';
 class Application{
     public initialize(): void{

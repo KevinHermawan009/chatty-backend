@@ -1,7 +1,7 @@
-import dotenv from 'dotenv'
+import dotenv from 'dotenv';
 import bunyan from 'bunyan';
 
-dotenv.config({})
+dotenv.config({});
 class Config{
     public DATABASE_URL: string | undefined;
     public JWT_TOKEN: string | undefined;
@@ -11,12 +11,12 @@ class Config{
     public CLIENT_URL: string | undefined;
     public REDIS_HOST: string | undefined;
 
-    private readonly DEFAULT_DATABASE_URL = 'mongodb+srv://chatty-backend.kikn1pw.mongodb.net/Chatty-Backend' //setDefaultValue
-    
+    private readonly DEFAULT_DATABASE_URL = 'mongodb+srv://chatty-backend.kikn1pw.mongodb.net/Chatty-Backend';//setDefaultValue
+
     constructor(){
-      
+
         this.DATABASE_URL = process.env.DATABASE_URL || this.DEFAULT_DATABASE_URL;
-        console.log(this.DATABASE_URL)
+        console.log(this.DATABASE_URL);
         this.JWT_TOKEN = process.env.JWT_TOKEN || '1234';
         this.NODE_ENV = process.env.NODE_ENV || '';
         this.SECRET_KEY_ONE = process.env.SECRET_KEY_ONE || '';
@@ -24,7 +24,7 @@ class Config{
         this.CLIENT_URL = process.env.CLIENT_URL || '';
         this.REDIS_HOST = process.env.REDIS_HOST || '';
     }
-    
+
     public createLogger(name: string) : bunyan {
         return bunyan.createLogger({ name, level: 'debug'});
       }
@@ -34,7 +34,7 @@ class Config{
         {
             if(value === undefined) {
                 throw new Error(key);
-            } else null
+            } else null;
         }
     }
 };

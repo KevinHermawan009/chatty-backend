@@ -34,7 +34,7 @@ export abstract class CustomError extends Error {
             status: this.status, //coming from 'Error' class where its MUST defined in 'IError' and inside 'CustomError' 
             statusCode: this.statusCode, //coming from 'Error' class where its MUST defined in 'IError' and inside 'CustomError' 
             // status1: this.status1
-        }
+        };
     }
 }
 
