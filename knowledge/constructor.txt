@@ -8,3 +8,11 @@ What Happens When A Constructor Gets Called?
 - object kosong baru di buat
 - 'this' akan refer ke new object dan menjadi current instance object
 - object baru akan di returned seperti the return value sih Constructor
+
+'super(); like inheritance of children -> to children that extends this class
+'super(); di panggil karna extend dari error constructor bawaan nodeJs 
+'super(); tujuan di panggil? 
+- semua data yang di define di dalem class yang extends dari constructor akan 
+  bisa di akses oleh custom arrow class yang akan extends dari class parent 
+- kesimpulan: kalo mau pake data atau extends class dan mau pake data dari dalem constructor,
+  saat mendifine constructor di dalem class yang di buat, kita harus manggil super method dan pass property dari constructor

@@ -7,4 +7,5 @@ yarn typescript init (if no tsconfig.js)
 yarn add nodemon -D for local server
 yarn add tsconfig-paths -D
 yarn add dotenv for env setup
-yarn add @socket.io/redis-adapter redis //to maintained communcate when diconnect or reconnect
+yarn add @socket.io/redis-adapter redis socket.io//to maintained communcate when diconnect or reconnect
+yarn add bunyan //pengganti console.log
