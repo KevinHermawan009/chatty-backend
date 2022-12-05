@@ -19,8 +19,11 @@ import { Server } from 'socket.io';
 import { createClient } from 'redis';
 import { createAdapter } from '@socket.io/redis-adapter';
 import applicationRoutes from './routes';
-const SERVER_PORT = 3001;
+import Logger from 'bunyan';
+import { CustomError, IErrorResponse } from "./shared/globals/helpers/error-handler";
 
+const SERVER_PORT = 3001;
+const log: Logger = config.createLogger('server');
 export class ChattyServer {
   //whenever instantiate the server it'll pass in the instance of the express application and set to 'private app' variable
   private app: Application;
@@ -66,7 +69,19 @@ export class ChattyServer {
     applicationRoutes(app);
   }
   
-  private globalErrorHandler(app: Application): void {}
+  private globalErrorHandler(app: Application): void {
+    app.all('*', (req: Request, res: Response)=>{
+      res.status(HTTP_STATUS.NOT_FOUND).json({message: `${req.originalUrl} not found`})
+    }); //this how express catch erorr which related to URL available 
+    app.use((error: IErrorResponse, req: Request, res: Response, next: NextFunction) => {
+      log.error(error)
+      if(error instanceof CustomError) {
+        return res.status(error.statusCode).json(error.serializeErrors())
+      }
+      next();
+    })
+    //response from 'IErrorResponse' -> and itll check to 'serializeErrors()' which error need to run from 'IError'
+  }
 
   private async startServer(app: Application): Promise <void> {
     try {
@@ -75,7 +90,7 @@ export class ChattyServer {
       this.startHttpServer(httpServer);
       this.socketIOConnections(socketIO);
     } catch (error) {
-      console.log('err', error)
+      log.error('err', error)
       
     }
   }
@@ -95,9 +110,9 @@ export class ChattyServer {
   }
 
   private startHttpServer(httpServer: http.Server): void {
-    console.log(`Server is runnin ${process.pid}`)
+    log.info(`Server is runnin ${process.pid}`)
     httpServer.listen(SERVER_PORT, ()=>{
-      console.log('server is up ',SERVER_PORT);
+      log.info('server is up ',SERVER_PORT);
     });
   }
 
