@@ -1,4 +1,4 @@
-setupServer use 
+setupServer use
 yarn add express
 yarn add @types/express --save-dev
 yarn add cors //security middleware
@@ -8,7 +8,8 @@ yarn add cookie-session //saving session and data neeed in cookies and will avai
 yarn add compression //compression
 yarn add express-async-error //catch async await errors
 yarn add http-status-codes
-
+yarn add ttypescript   // changes ur './' paths to '@root/**' make easy track
+yarn add typescript-transform-paths //to make sure the change path change correctly and dont go back to previous version
 app.use -> 'use' used to call middleware
 
 yarn add @socket.io/redis-adapter -D
