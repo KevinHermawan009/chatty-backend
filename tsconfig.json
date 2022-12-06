@@ -28,11 +28,11 @@
       }
     ],
     "paths": {
-      "@root/*":["src/*"],
-      "@global/*":["src/shared/globals/*"],
-      "@services/*":["src/shared/services/*"],
-      "@socket/*":["src/shared/sockets/*"],
-      "@workers/*":["src/shared/workers/*"],
+      "@global/*" : ["src/shared/globals/*"],
+      "@services/*" : ["src/shared/services/*"],
+      "@socket/*" : ["src/shared/sockets/*"],
+      "@workers/*" : ["src/shared/workers/*"],
+      "@root/*" : ["src/*"]
     }
   }
 }
