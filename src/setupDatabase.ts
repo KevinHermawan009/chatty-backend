@@ -3,6 +3,7 @@ import { config } from '@root/config';
 import Logger from 'bunyan';
 
 const log: Logger = config.createLogger('setupDatabase');
+mongoose.set('strictQuery', false); //remove warning
 
 export default () => {
   const connect = () => {
