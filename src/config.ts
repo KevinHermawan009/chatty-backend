@@ -4,9 +4,7 @@ import cloudinary from 'cloudinary';
 import path from 'path';
 
 dotenv.config({path: path.resolve(__dirname, '../env/.env')});
-
 class Config {
-
   public DATABASE_URL: string | undefined;
   public JWT_TOKEN: string | undefined;
   public NODE_ENV: string | undefined;
@@ -49,9 +47,6 @@ class Config {
     cloud_name : this.CLOUD_NAME,
     api_key : this.CLOUD_API_KEY,
     api_secret : this.CLOUD_API_SECRET
-    // cloud_name : 'dqn9uwp3c',
-    // api_key : '649496521367673',
-    // api_secret : 'anbmr4r5WCecXtlq2WZ59OrI0pM'
   });
   }
 }
