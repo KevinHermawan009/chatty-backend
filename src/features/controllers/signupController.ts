@@ -8,11 +8,13 @@ import { BadRequestError } from '@global/helpers/error-handler';
 import { Helpers } from '@global/helpers/helpers';
 import { UploadApiResponse } from 'cloudinary';
 import { uploads } from '@global/helpers/cloudinary-upload';
+import HTTP_STATUS from 'http-status-codes';
 
 export class SignUp{
     @joiValidation(signupSchema)
     public async create(req: Request, res: Response) : Promise<void>{
         const{ username, email, password, avatarColor, avatarImage } = req.body;
+        // console.log('BODY', req.body);
         const userIsExist: IAuthDocument = await authService.getUserByUsernameOrEmail(username, email);
         if(userIsExist){
             throw new BadRequestError('invalid Credentials');
@@ -35,6 +37,7 @@ export class SignUp{
     { //checker any upload error by checking public id
         throw new BadRequestError('File upload: invalid credentials, try again');
     }
+    res.status(HTTP_STATUS.CREATED).json({message: 'user created!!', authData});
     }
 
     private signupData(data: ISignUpData): IAuthDocument {
