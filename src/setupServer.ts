@@ -112,6 +112,6 @@ export class ChattyServer {
 
   private socketIOConnections(io: Server): void {
     //place to defined socket method
-    log.info('socketIoConn', io);
+    // log.info('socketIoConn', io);
   }
 }
