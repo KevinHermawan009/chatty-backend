@@ -45,6 +45,10 @@ bower_components
 build/Release
 # my knowledge
 knowledge/
+
+# endPoint checker
+endpoints/
+
 # Dependency directories
 node_modules/
 jspm_packages/
