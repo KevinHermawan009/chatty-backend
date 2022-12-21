@@ -9,6 +9,10 @@ import { Helpers } from '@global/helpers/helpers';
 import { UploadApiResponse } from 'cloudinary';
 import { uploads } from '@global/helpers/cloudinary-upload';
 import HTTP_STATUS from 'http-status-codes';
+import { IUserDocument } from '@root/features/user/interfaces/user.interface';
+import { UserCache } from '@services/redis/user.cache';
+
+const userCache: UserCache = new UserCache();
 
 export class SignUp{
     @joiValidation(signupSchema)
@@ -37,6 +41,12 @@ export class SignUp{
     { //checker any upload error by checking public id
         throw new BadRequestError('File upload: invalid credentials, try again');
     }
+
+    //add to redisc cache
+    const userDataForCache: IUserDocument = SignUp.prototype.userData(authData, userObjectId);
+    userDataForCache.profilePicture = `https://res.cloudinary.com/dqn9uwp3c/image/upload/v${result.version}/{userObjectId}`;
+    await userCache.saveUserToCache(`${userObjectId}`, uId, userDataForCache);
+
     res.status(HTTP_STATUS.CREATED).json({message: 'user created!!', authData});
     }
 
@@ -52,5 +62,42 @@ export class SignUp{
             createdAt: new Date()
         } as IAuthDocument;
     }
+
+    private userData(data: IAuthDocument, userObjectId: ObjectId): IUserDocument {
+      const {_id, username, email, uId, password, avatarColor} = data;
+      return{
+        _id: userObjectId,
+        authId: _id,
+        uId,
+        username: Helpers.firstLetterUppercase(username),
+        email,
+        password,
+        avatarColor,
+        postsCount: 0,
+        work:'',
+        school:'',
+        quote: '',
+        location:'',
+        bgImageVersion:'',
+        bgImageId:'',
+        profilePicture:'',
+        blocked:[],
+        blockedBy:[],
+        followersCount:0,
+        followingCount:0,
+        notifications:{
+          messages: true,
+          reactions: true,
+          comments: true,
+          follows: true
+        },
+        social:{
+          facebook:'',
+          instagram:'',
+          twitter:'',
+          youtube:''
+        }
+      } as unknown as IUserDocument;
+  }
 
 }
