@@ -15,7 +15,7 @@ import applicationRoutes from '@root/routes';
 import Logger from 'bunyan';
 import { CustomError, IErrorResponse } from '@global/helpers/error-handler';
 
-const SERVER_PORT = 3001;
+const SERVER_PORT = 5000;
 const log: Logger = config.createLogger('server');
 export class ChattyServer {
   //whenever instantiate the server it'll pass in the instance of the express application and set to 'private app' variable
