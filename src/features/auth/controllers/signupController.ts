@@ -11,7 +11,9 @@ import { uploads } from '@global/helpers/cloudinary-upload';
 import HTTP_STATUS from 'http-status-codes';
 import { IUserDocument } from '@root/features/user/interfaces/user.interface';
 import { UserCache } from '@services/redis/user.cache';
-
+import { omit } from 'lodash';
+import { authQueue } from '@services/queues/auth.queue';
+import { userQueue } from '@services/queues/user.queue';
 const userCache: UserCache = new UserCache();
 
 export class SignUp{
@@ -46,6 +48,12 @@ export class SignUp{
     const userDataForCache: IUserDocument = SignUp.prototype.userData(authData, userObjectId);
     userDataForCache.profilePicture = `https://res.cloudinary.com/dqn9uwp3c/image/upload/v${result.version}/{userObjectId}`;
     await userCache.saveUserToCache(`${userObjectId}`, uId, userDataForCache);
+    // add to Database
+    //set data for the job message queue
+    omit(userDataForCache, ['uId','username', 'email','avatarColor', 'password']);
+
+    authQueue.addAuthUserJob('addAuthUserToDB', {value : userDataForCache });
+    userQueue.addUserJob('addUserToDB', {value : userDataForCache });
 
     res.status(HTTP_STATUS.CREATED).json({message: 'user created!!', authData});
     }
