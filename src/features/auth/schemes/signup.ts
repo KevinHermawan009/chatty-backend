@@ -1,7 +1,6 @@
 import Joi, { ObjectSchema } from 'joi';
 
 export const signupSchema: ObjectSchema = Joi.object().keys({
-
   username: Joi.string().required().min(4).max(8).messages({
     'string.base': 'username must be a string',
     'string.min': 'username invalid',
@@ -20,10 +19,9 @@ export const signupSchema: ObjectSchema = Joi.object().keys({
     'string.empty': 'email must be filled'
   }),
   avatarColor: Joi.string().required().messages({
-    'any.required': 'avatar color required',
+    'any.required': 'avatar color required'
   }),
   avatarImage: Joi.string().required().messages({
-    'any.required': 'avatar image required',
+    'any.required': 'avatar image required'
   })
-
 });

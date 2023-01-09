@@ -1,7 +1,6 @@
 import Joi, { ObjectSchema } from 'joi';
 
 export const loginSchema: ObjectSchema = Joi.object().keys({
-
   username: Joi.string().required().min(4).max(8).messages({
     'string.base': 'username must be a string',
     'string.min': 'username invalid',
@@ -14,5 +13,4 @@ export const loginSchema: ObjectSchema = Joi.object().keys({
     'string.max': 'password invalid',
     'string.empty': 'password must be filled'
   })
-
 });
