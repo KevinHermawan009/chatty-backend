@@ -32,7 +32,8 @@ authSchema.pre('save', async function (this: IAuthDocument, next: () => void) {
   next();
 }); //before password saved it need to be hash the password
 
-authSchema.methods.comparePassword = async function (password: string): Promise<boolean> { //for login compare password
+authSchema.methods.comparePassword = async function (password: string): Promise<boolean> {
+  //for login compare password
   const hashedPassword: string = (this as unknown as IAuthDocument).password!; //this here is any object
   return compare(password, hashedPassword);
 };
