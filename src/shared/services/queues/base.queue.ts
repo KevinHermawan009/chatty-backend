@@ -6,8 +6,7 @@ import { BullAdapter } from '@bull-board/api/bullAdapter';
 import { config } from '@root/config';
 import { IAuthJob } from '@auth/interfaces/auth.interface';
 
-
-type IBaseJobData =  | IAuthJob;
+type IBaseJobData = IAuthJob;
 let bullAdapter: BullAdapter[] = [];
 export let serverAdapter: ExpressAdapter;
 
@@ -17,7 +16,7 @@ export abstract class BaseQueue {
 
   constructor(queueName: string) {
     this.queue = new Queue(queueName, `${config.REDIS_HOST}`);
-    bullAdapter.push( new BullAdapter(this.queue));
+    bullAdapter.push(new BullAdapter(this.queue));
     bullAdapter = [...new Set(bullAdapter)]; //remove duplicate
     serverAdapter = new ExpressAdapter();
     serverAdapter.setBasePath('/queues');
@@ -28,23 +27,22 @@ export abstract class BaseQueue {
     });
 
     this.log = config.createLogger(`${queueName}Queue`);
-    this.queue.on('completed', (job:Job) =>{
+    this.queue.on('completed', (job: Job) => {
       job.remove();
     });
-    this.queue.on('global:completed', (job:Job) =>{
+    this.queue.on('global:completed', (job: Job) => {
       this.log.info(`Job ${job.id} completed`);
     });
-    this.queue.on('global:stalled', (job:Job) =>{
+    this.queue.on('global:stalled', (job: Job) => {
       this.log.info(`Job ${job.id} completed`);
     });
   }
 
-protected addJob(name: string, data: IBaseJobData): void {
-  this.queue.add(name, data, {attempts: 3, backoff: {type: 'fixed', delay: 5000}});
+  protected addJob(name: string, data: IBaseJobData): void {
+    this.queue.add(name, data, { attempts: 3, backoff: { type: 'fixed', delay: 5000 } });
+  }
+  //concurrency job we want to be proceed at given time
+  protected processJob(name: string, concurrency: number, callback: Queue.ProcessCallbackFunction<void>): void {
+    this.queue.process(name, concurrency, callback);
+  }
 }
-//concurrency job we want to be proceed at given time
-protected processJob(name: string, concurrency: number, callback: Queue.ProcessCallbackFunction<void>): void {
-  this.queue.process( name, concurrency, callback);
-}
-}
-
