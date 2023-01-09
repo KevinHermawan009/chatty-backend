@@ -1,1 +1,0 @@
-interface is like a contract that how  the data that u want to define and should look like

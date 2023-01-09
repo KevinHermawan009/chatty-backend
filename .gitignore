@@ -44,6 +44,12 @@ bower_components
 # Compiled binary addons (https://nodejs.org/api/addons.html)
 build/Release
 
+# my documentation
+knowledge/
+
+# endPoint checker
+endpoints/
+
 # Dependency directories
 node_modules/
 jspm_packages/
