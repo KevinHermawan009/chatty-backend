@@ -3,7 +3,7 @@ import bunyan from 'bunyan';
 import cloudinary from 'cloudinary';
 import path from 'path';
 
-dotenv.config({path: path.resolve(__dirname, '../env/.env')});
+dotenv.config({ path: path.resolve(__dirname, '../env/.env') });
 class Config {
   public DATABASE_URL: string | undefined;
   public JWT_TOKEN: string | undefined;
@@ -36,20 +36,20 @@ class Config {
   }
 
   public validateConfig(): void {
-    for (const [key, value] of Object.entries(this)) { //-> this contain all Config properties
+    for (const [key, value] of Object.entries(this)) {
+      //-> this contain all Config properties
       if (value === undefined) {
         throw new Error(key);
       } else null;
     }
   }
-  public cloudinaryConfig(): void{
-  cloudinary.v2.config({
-    cloud_name : this.CLOUD_NAME,
-    api_key : this.CLOUD_API_KEY,
-    api_secret : this.CLOUD_API_SECRET
-  });
+  public cloudinaryConfig(): void {
+    cloudinary.v2.config({
+      cloud_name: this.CLOUD_NAME,
+      api_key: this.CLOUD_API_KEY,
+      api_secret: this.CLOUD_API_SECRET
+    });
   }
 }
-
 
 export const config: Config = new Config();
